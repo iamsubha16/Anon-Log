@@ -3,14 +3,25 @@ import { useState } from 'react';
 
 import { Box, Avatar, TextField, Button, Typography, Container } from '@mui/material'
 
+const signupInitialValues = {
+    name: "",
+    username: "",
+    password: "",
+}
+
 const Login = () => {
 
     const imageURL = 'https://cdn.pixabay.com/photo/2022/01/11/21/48/edit-6931553_640.png';
 
     const [account, toggleAccount] = useState('login');
+    const [signup, setSignup] = useState(signupInitialValues);
 
     const toggleSignup = () => {
         account === 'login' ? toggleAccount('signup') : toggleAccount('login');
+    }
+
+    const onInput = (e) => {
+        setSignup({ ...signup, [e.target.name]: e.target.value });
     }
 
     return (
@@ -77,17 +88,23 @@ const Login = () => {
                                 id="outlined-basic"
                                 label="Name"
                                 variant="outlined"
+                                onChange={(e) => onInput(e)}
+                                name='name'
                             />
                             <TextField
                                 id="outlined-basic"
                                 label="Username"
                                 variant="outlined"
+                                onChange={(e) => onInput(e)}
+                                name='username'
                             />
                             <TextField
                                 id="outlined-password-input"
                                 label="Password"
                                 type="password"
                                 autoComplete="current-password"
+                                onChange={(e) => onInput(e)}
+                                name='password'
                             />
                         </Container>
 

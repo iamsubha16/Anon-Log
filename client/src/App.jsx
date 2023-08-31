@@ -1,5 +1,4 @@
 import React from 'react'
-import './App.css'
 
 // Pages
 import Login from './pages/login'
