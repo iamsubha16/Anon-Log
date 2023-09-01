@@ -3,6 +3,8 @@ import { useState } from 'react';
 
 import { Box, Avatar, TextField, Button, Typography, Container } from '@mui/material'
 
+import { API } from '../../services/api.js';
+
 const signupInitialValues = {
     name: "",
     username: "",
@@ -15,6 +17,7 @@ const Login = () => {
 
     const [account, toggleAccount] = useState('login');
     const [signup, setSignup] = useState(signupInitialValues);
+    const [error, setError] = useState('');
 
     const toggleSignup = () => {
         account === 'login' ? toggleAccount('signup') : toggleAccount('login');
@@ -22,6 +25,18 @@ const Login = () => {
 
     const onInput = (e) => {
         setSignup({ ...signup, [e.target.name]: e.target.value });
+    }
+
+    const signupUser = async () => {
+        //Calling API
+        let response = await API.userSignup(signup);
+        if (response.isSuccess) {
+            setError('');
+            setSignup(signupInitialValues);
+            toggleAccount('login');
+        } else {
+            setError('Something went wrong! please try again later');
+        }
     }
 
     return (
@@ -60,6 +75,7 @@ const Login = () => {
                                 type="password"
                                 autoComplete="current-password"
                             />
+                            {error && <Typography>{error}</Typography>}
                         </Container>
 
                         <Container maxWidth="sm"
@@ -106,6 +122,7 @@ const Login = () => {
                                 onChange={(e) => onInput(e)}
                                 name='password'
                             />
+                            {error && <Typography>{error}</Typography>}
                         </Container>
 
                         <Container maxWidth="sm"
@@ -115,7 +132,7 @@ const Login = () => {
                                 flexDirection: "column",
                                 alignItems: "center",
                             }}>
-                            <Button variant="contained">Login</Button>
+                            <Button variant="contained" onClick={() => signupUser()}>Signup</Button>
                             <Typography variant="h6" gutterBottom sx={{ marginTop: "4%", color: "#666" }}>
                                 OR
                             </Typography>
