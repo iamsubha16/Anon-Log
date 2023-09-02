@@ -11,6 +11,11 @@ const signupInitialValues = {
     password: "",
 }
 
+const loginInitialValues = {
+    username: "",
+    password: "",
+}
+
 const Login = () => {
 
     const imageURL = 'https://cdn.pixabay.com/photo/2022/01/11/21/48/edit-6931553_640.png';
@@ -18,6 +23,7 @@ const Login = () => {
     const [account, toggleAccount] = useState('login');
     const [signup, setSignup] = useState(signupInitialValues);
     const [error, setError] = useState('');
+    const [login, setLogin] = useState(loginInitialValues);
 
     const toggleSignup = () => {
         account === 'login' ? toggleAccount('signup') : toggleAccount('login');
@@ -28,12 +34,27 @@ const Login = () => {
     }
 
     const signupUser = async () => {
-        //Calling API
+        //Calling API for adding user
         let response = await API.userSignup(signup);
         if (response.isSuccess) {
             setError('');
             setSignup(signupInitialValues);
             toggleAccount('login');
+        } else {
+            setError('Something went wrong! please try again later');
+        }
+    }
+
+    const onValueChange = (e) => {
+        setLogin({ ...login, [e.target.name]: e.target.value });
+    }
+
+    const loginUser = async () => {
+        //Calling API for authenticating User
+        let res = await API.userLogin(login);
+
+        if (res.isSuccess) {
+            setError('');
         } else {
             setError('Something went wrong! please try again later');
         }
@@ -52,9 +73,7 @@ const Login = () => {
                 src={imageURL}
                 sx={{ width: 200, height: 200 }}
             />
-
             {
-
                 account === 'login' ?
                     <Box>
                         <Container maxWidth="sm" sx={{
@@ -68,12 +87,18 @@ const Login = () => {
                                 id="outlined-basic"
                                 label="Username"
                                 variant="outlined"
+                                value={login.username}
+                                onChange={(e) => onValueChange(e)}
+                                name='username'
                             />
                             <TextField
                                 id="outlined-password-input"
                                 label="Password"
                                 type="password"
                                 autoComplete="current-password"
+                                value={login.password}
+                                onChange={(e) => onValueChange(e)}
+                                name='password'
                             />
                             {error && <Typography>{error}</Typography>}
                         </Container>
@@ -85,7 +110,7 @@ const Login = () => {
                                 flexDirection: "column",
                                 alignItems: "center",
                             }}>
-                            <Button variant="contained">Login</Button>
+                            <Button variant="contained" onClick={() => loginUser()}>Login</Button>
                             <Typography variant="h6" gutterBottom sx={{ marginTop: "4%", color: "#666" }}>
                                 OR
                             </Typography>
@@ -140,8 +165,6 @@ const Login = () => {
                         </Container>
                     </Box>
             }
-
-
         </Container>
     )
 }
