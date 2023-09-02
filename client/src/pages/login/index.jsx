@@ -1,9 +1,12 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 import { Box, Avatar, TextField, Button, Typography, Container } from '@mui/material'
 
 import { API } from '../../services/api.js';
+import { DataContext } from '../../context/dataProvider.jsx';
+
+import { useNavigate } from 'react-router-dom';
 
 const signupInitialValues = {
     name: "",
@@ -24,6 +27,10 @@ const Login = () => {
     const [signup, setSignup] = useState(signupInitialValues);
     const [error, setError] = useState('');
     const [login, setLogin] = useState(loginInitialValues);
+
+    const { setAccount } = useContext(DataContext);
+
+    const navigate = useNavigate();
 
     const toggleSignup = () => {
         account === 'login' ? toggleAccount('signup') : toggleAccount('login');
@@ -51,10 +58,17 @@ const Login = () => {
 
     const loginUser = async () => {
         //Calling API for authenticating User
-        let res = await API.userLogin(login);
+        let response = await API.userLogin(login);
 
-        if (res.isSuccess) {
+        if (response.isSuccess) {
             setError('');
+
+            sessionStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
+            sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
+
+            setAccount({ username: response.data.username, name: response.data.name });
+
+            navigate('/');
         } else {
             setError('Something went wrong! please try again later');
         }
@@ -63,7 +77,7 @@ const Login = () => {
     return (
         <Container maxWidth="sm" sx={{
             height: "100vh",
-            marginTop: { xs: "45%", lg: "10%" },
+            paddingTop: { xs: "45%", lg: "10%" },
             display: "flex",
             flexDirection: "column",
             alignItems: "center"
