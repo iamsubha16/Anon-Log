@@ -19,7 +19,7 @@ const loginInitialValues = {
     password: "",
 }
 
-const Login = () => {
+const Login = ({ isUserAuthenticated }) => {
 
     const imageURL = 'https://cdn.pixabay.com/photo/2022/01/11/21/48/edit-6931553_640.png';
 
@@ -67,6 +67,8 @@ const Login = () => {
             sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
 
             setAccount({ username: response.data.username, name: response.data.name });
+
+            isUserAuthenticated(true);
 
             navigate('/');
         } else {
