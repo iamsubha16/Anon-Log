@@ -9,6 +9,7 @@ import DataProvider from './context/dataProvider'
 // Pages
 import Login from './pages/login'
 import Home from './pages/home'
+import CreatePosts from './pages/createPosts';
 
 //Components
 import Header from './components/header';
@@ -34,6 +35,10 @@ function App() {
             <Route path="/login" element={<Login isUserAuthenticated={isUserAuthenticated} />} />
             <Route path='/' element={<PrivateRoute isAuthenticated={isAuthenticated} />}>
               <Route path="/" element={<Home />} exact />
+            </Route>
+
+            <Route path='/create' element={<PrivateRoute isAuthenticated={isAuthenticated} />}>
+              <Route path="/create" element={<CreatePosts />} exact />
             </Route>
           </Routes>
         </Router>

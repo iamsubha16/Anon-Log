@@ -10,6 +10,7 @@ const Banner = () => {
                 height: "100vh",
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "contain",
+                objectFit: "cover",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
