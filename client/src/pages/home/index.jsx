@@ -2,7 +2,7 @@ import React from 'react'
 
 //components
 import Banner from '../../components/banner';
-import { Box, Container, Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import Categories from '../../components/categories';
 
 const Home = () => {
